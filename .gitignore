@@ -1,0 +1,9 @@
+# Visual Studio 2019 cache/options directory
+.vs/
+out/
+
+# SFML files
+SFML/
+
+# Readme
+readme.md
