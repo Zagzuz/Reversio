@@ -2,6 +2,8 @@
 #define HEX_H
 
 #include <cassert>
+#include <cmath>
+#include <stdexcept>
 #include <array>
 
 namespace rev

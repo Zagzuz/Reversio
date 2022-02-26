@@ -1,6 +1,6 @@
-﻿#include "Hex.h"
+﻿#include <SFML/Window.hpp>
 
-#include <SFML/Window.hpp>
+#include "Hex.h"
 
 int main()
 {

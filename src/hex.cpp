@@ -1,12 +1,14 @@
 #include "Hex.h"
 
-#include <cmath>
 
 namespace rev
 {
     Hex::Hex(Hex::crd_t q, Hex::crd_t r, Hex::crd_t s) : q_(q), r_(r)
     {
-        assert(q + r + s == 0);
+        if (q + r + s != 0)
+        {
+            throw std::invalid_argument("Hex coordinate constraint violation");
+        }
     }
 
     Hex::crd_t Hex::length() const

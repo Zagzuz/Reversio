@@ -2,8 +2,9 @@
 .vs/
 out/
 
-# SFML files
+# Packages
 SFML/
+Boost/
 
 # Readme
 readme.md
