@@ -1,11 +1,12 @@
 #include "Hex.h"
 
-
 namespace rev
 {
+    Hex::Hex() : q_(0), r_(0) {}
+
     Hex::Hex(Hex::crd_t q, Hex::crd_t r, Hex::crd_t s) : q_(q), r_(r)
     {
-        if (q + r + s != 0)
+        if (auto res = Nof(q) + r + s; !res.has_value() || res.get() != 0)
         {
             throw std::invalid_argument("Hex coordinate constraint violation");
         }
@@ -13,14 +14,14 @@ namespace rev
 
     Hex::crd_t Hex::length() const
     {
-        return static_cast<Hex::crd_t>((abs(q()) + abs(r()) + abs(s())) / 2);
+        return std::abs(q() / 2) + std::abs(r() / 2) + std::abs(s() / 2);
     }
 
     Hex::crd_t Hex::distance(const Hex& lhs, const Hex& rhs)
     {
-        return static_cast<Hex::crd_t>((abs(lhs.q() - rhs.q()) +
-                                        abs(lhs.r() - rhs.r()) +
-                                        abs(lhs.s() - rhs.s())) / 2);
+        return std::abs(lhs.q() / 2 - rhs.q() / 2) +
+               std::abs(lhs.r() / 2 - rhs.r() / 2) +
+               std::abs(lhs.s() / 2 - rhs.s() / 2);
     }
 
     const Hex& Hex::direction(int dir)
@@ -38,23 +39,41 @@ namespace rev
 
     Hex operator+(const Hex& lhs, const Hex& rhs)
     {
-        return Hex(lhs.q() + rhs.q(), 
-                   lhs.r() + rhs.r(),
-                   lhs.s() + rhs.s());
+        auto x = Nof(lhs.q()) + rhs.q();
+        auto y = Nof(lhs.r()) + rhs.r();
+        auto z = Nof(lhs.s()) + rhs.s();
+        if (!x.has_value() || !y.has_value() || !z.has_value())
+        {
+            // TODO LOG
+            return {};
+        }
+        return Hex(x.get(), y.get(), z.get());
     }
 
     Hex operator-(const Hex& lhs, const Hex& rhs)
     {
-        return Hex(lhs.q() - rhs.q(),
-                   lhs.r() - rhs.r(),
-                   lhs.s() - rhs.s());
+        auto x = Nof(lhs.q()) - rhs.q();
+        auto y = Nof(lhs.r()) - rhs.r();
+        auto z = Nof(lhs.s()) - rhs.s();
+        if (!x.has_value() || !y.has_value() || !z.has_value())
+        {
+            // TODO LOG
+            return {};
+        }
+        return Hex(x.get(), y.get(), z.get());
     }
 
     Hex operator*(const Hex& lhs, const Hex& rhs)
     {
-        return Hex(lhs.q() * rhs.q(),
-                   lhs.r() * rhs.r(),
-                   lhs.s() * rhs.s());
+        auto x = Nof(lhs.q()) * rhs.q();
+        auto y = Nof(lhs.r()) * rhs.r();
+        auto z = Nof(lhs.s()) * rhs.s();
+        if (!x.has_value() || !y.has_value() || !z.has_value())
+        {
+            // TODO LOG
+            return Hex();
+        }
+        return Hex(x.get(), y.get(), z.get());
     }
 
     bool operator==(const Hex& lhs, const Hex& rhs) noexcept

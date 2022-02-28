@@ -1,10 +1,13 @@
 #ifndef HEX_H
 #define HEX_H
 
-#include <cassert>
+#include "nof.h"
+
 #include <cmath>
-#include <stdexcept>
 #include <array>
+#include <cassert>
+#include <stdexcept>
+#include <limits>
 
 namespace rev
 {
@@ -12,6 +15,7 @@ namespace rev
     {
     public:
         using crd_t = int;
+        Hex();
         Hex(crd_t, crd_t, crd_t);
         crd_t q() const noexcept { return q_; }
         crd_t r() const noexcept { return r_; }

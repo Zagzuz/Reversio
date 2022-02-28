@@ -1,10 +1,12 @@
 ﻿#include <SFML/Window.hpp>
+#include <iostream>
 
 #include "Hex.h"
 
 int main()
 {
     rev::Hex h(0, -1, 1), j(-3, 3, 0);
+    std::cout << rev::Hex(INT_MAX, INT_MIN + 1, 0).length();
     rev::Hex::distance(h, j);
     
     sf::Window window(sf::VideoMode(800, 600), sf::String("Reversio"));
