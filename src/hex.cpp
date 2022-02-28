@@ -44,7 +44,10 @@ namespace rev
         auto z = Nof(lhs.s()) + rhs.s();
         if (!x.has_value() || !y.has_value() || !z.has_value())
         {
-            // TODO LOG
+            BOOST_LOG_TRIVIAL(error) << 
+                "Hex coordinates overflow occured while executing "
+                "Hex(" << lhs.q() << ';' << lhs.r() << ';' << lhs.s() << ") + "
+                "Hex(" << rhs.q() << ';' << rhs.r() << ';' << rhs.s() << ")\n";
             return {};
         }
         return Hex(x.get(), y.get(), z.get());
@@ -57,7 +60,10 @@ namespace rev
         auto z = Nof(lhs.s()) - rhs.s();
         if (!x.has_value() || !y.has_value() || !z.has_value())
         {
-            // TODO LOG
+            BOOST_LOG_TRIVIAL(error) <<
+                "Hex coordinates overflow occured while executing "
+                "Hex(" << lhs.q() << ';' << lhs.r() << ';' << lhs.s() << ") - "
+                "Hex(" << rhs.q() << ';' << rhs.r() << ';' << rhs.s() << ")\n";
             return {};
         }
         return Hex(x.get(), y.get(), z.get());
@@ -70,7 +76,10 @@ namespace rev
         auto z = Nof(lhs.s()) * rhs.s();
         if (!x.has_value() || !y.has_value() || !z.has_value())
         {
-            // TODO LOG
+            BOOST_LOG_TRIVIAL(error) <<
+                "Hex coordinates overflow occured while executing "
+                "Hex(" << lhs.q() << ';' << lhs.r() << ';' << lhs.s() << ") * "
+                "Hex(" << rhs.q() << ';' << rhs.r() << ';' << rhs.s() << ")\n";
             return Hex();
         }
         return Hex(x.get(), y.get(), z.get());

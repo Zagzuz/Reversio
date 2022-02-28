@@ -7,7 +7,7 @@
 #include <array>
 #include <cassert>
 #include <stdexcept>
-#include <limits>
+#include <boost/log/trivial.hpp>
 
 namespace rev
 {
