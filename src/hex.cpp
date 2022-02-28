@@ -2,8 +2,6 @@
 
 namespace rev
 {
-    Hex::Hex() : q_(0), r_(0) {}
-
     Hex::Hex(Hex::crd_t q, Hex::crd_t r, Hex::crd_t s) : q_(q), r_(r)
     {
         if (auto res = Nof(q) + r + s; !res.has_value() || res.get() != 0)
@@ -48,7 +46,7 @@ namespace rev
                 "Hex coordinates overflow occured while executing "
                 "Hex(" << lhs.q() << ';' << lhs.r() << ';' << lhs.s() << ") + "
                 "Hex(" << rhs.q() << ';' << rhs.r() << ';' << rhs.s() << ")\n";
-            return {};
+            return lhs;
         }
         return Hex(x.get(), y.get(), z.get());
     }
@@ -64,7 +62,7 @@ namespace rev
                 "Hex coordinates overflow occured while executing "
                 "Hex(" << lhs.q() << ';' << lhs.r() << ';' << lhs.s() << ") - "
                 "Hex(" << rhs.q() << ';' << rhs.r() << ';' << rhs.s() << ")\n";
-            return {};
+            return lhs;
         }
         return Hex(x.get(), y.get(), z.get());
     }
@@ -80,7 +78,7 @@ namespace rev
                 "Hex coordinates overflow occured while executing "
                 "Hex(" << lhs.q() << ';' << lhs.r() << ';' << lhs.s() << ") * "
                 "Hex(" << rhs.q() << ';' << rhs.r() << ';' << rhs.s() << ")\n";
-            return Hex();
+            return lhs;
         }
         return Hex(x.get(), y.get(), z.get());
     }

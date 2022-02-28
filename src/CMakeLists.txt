@@ -5,8 +5,7 @@ find_package(SFML 2.5 COMPONENTS
 			 system
 			 graphics
 			 audio
-			 network REQUIRED
-)
+			 network REQUIRED)
 find_package(Boost 1.78 COMPONENTS log REQUIRED)
 link_directories(${PROJECT_SOURCE_DIR}/Boost/lib)
 include_directories(${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src)
@@ -19,5 +18,4 @@ target_link_libraries(Reversio PRIVATE
 					  sfml-graphics
 					  sfml-network
 					  sfml-system
-)
-target_link_libraries(Reversio ${Boost_log})
+					  ${Boost_log})
