@@ -1,7 +1,8 @@
 ﻿#include <SFML/Window.hpp>
 #include <iostream>
 
-#include "Hex.h"
+#include "hex.h"
+#include "orientation.h"
 
 int main()
 {

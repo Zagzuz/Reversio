@@ -15,7 +15,6 @@ namespace rev
     {
     public:
         using crd_t = int;
-        Hex();
         Hex(crd_t, crd_t, crd_t);
         crd_t q() const noexcept { return q_; }
         crd_t r() const noexcept { return r_; }
