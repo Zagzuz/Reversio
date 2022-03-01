@@ -1,5 +1,7 @@
 #include <boost/test/unit_test.hpp>
 
+#include <limits>
+
 #include "hex.h"
 
 BOOST_AUTO_TEST_SUITE(HexTests)

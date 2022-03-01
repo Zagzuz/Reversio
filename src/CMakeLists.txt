@@ -12,8 +12,10 @@ include_directories(${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src)
 
 add_executable(Reversio "main.cpp")
 add_library(Hex "hex.cpp" "hex.h")
+add_library(Orientation "orientation.cpp" "orientation.h")
 target_link_libraries(Reversio PRIVATE
 					  Hex
+					  Orientation
 					  sfml-audio
 					  sfml-graphics
 					  sfml-network

@@ -10,12 +10,12 @@ namespace rev
         }
     }
 
-    Hex::crd_t Hex::length() const
+    Hex::crd_t Hex::length() const noexcept
     {
         return std::abs(q() / 2) + std::abs(r() / 2) + std::abs(s() / 2);
     }
 
-    Hex::crd_t Hex::distance(const Hex& lhs, const Hex& rhs)
+    Hex::crd_t Hex::distance(const Hex& lhs, const Hex& rhs) noexcept
     {
         return std::abs(lhs.q() / 2 - rhs.q() / 2) +
                std::abs(lhs.r() / 2 - rhs.r() / 2) +

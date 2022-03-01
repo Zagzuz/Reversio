@@ -19,8 +19,8 @@ namespace rev
         crd_t q() const noexcept { return q_; }
         crd_t r() const noexcept { return r_; }
         crd_t s() const noexcept { return -q_ - r_; }
-        crd_t length() const;
-        static Hex::crd_t distance(const Hex& lhs, const Hex& rhs);
+        crd_t length() const noexcept;
+        static Hex::crd_t distance(const Hex& lhs, const Hex& rhs) noexcept;
         static const Hex& direction(int dir);
         Hex neighbor(int dir) const;
     private:
