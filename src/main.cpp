@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "hex.h"
+#include "point.h"
 #include "orientation.h"
 
 int main()
