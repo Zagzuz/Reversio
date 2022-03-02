@@ -2,6 +2,8 @@
 
 namespace rev
 {
+    Hex::Hex(Hex::crd_t q, Hex::crd_t r) : q_(q), r_(r) {}
+
     Hex::Hex(Hex::crd_t q, Hex::crd_t r, Hex::crd_t s) : q_(q), r_(r)
     {
         if (auto res = Nof(q) + r + s; !res.has_value() || res.get() != 0)
@@ -38,9 +40,9 @@ namespace rev
         double q = layout.orientation.b0 * pt.x + layout.orientation.b1 * pt.y;
         double r = layout.orientation.b2 * pt.x + layout.orientation.b3 * pt.y;
         double s = -q - r;
-        Hex::crd_t q2 = std::round(q);
-        Hex::crd_t r2 = std::round(r);
-        Hex::crd_t s2 = std::round(s);
+        Hex::crd_t q2 = static_cast<Hex::crd_t>(std::round(q));
+        Hex::crd_t r2 = static_cast<Hex::crd_t>(std::round(r));
+        Hex::crd_t s2 = static_cast<Hex::crd_t>(std::round(s));
         double q_diff = std::abs(q2 - q);
         double r_diff = std::abs(r2 - r);
         double s_diff = std::abs(s2 - s);

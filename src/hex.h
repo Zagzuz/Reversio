@@ -19,6 +19,7 @@ namespace rev
     {
     public:
         using crd_t = int;
+        Hex(crd_t, crd_t);
         Hex(crd_t, crd_t, crd_t);
         crd_t q() const noexcept { return q_; }
         crd_t r() const noexcept { return r_; }
@@ -39,6 +40,16 @@ namespace rev
     Hex operator-(const Hex& lhs, const Hex& rhs);
     Hex operator*(const Hex& lhs, const Hex& rhs);
     bool operator==(const Hex& lhs, const Hex& rhs) noexcept;
+    
+    struct HexHash
+    {
+        std::size_t operator()(const Hex& h) const
+        {
+            return std::hash<Hex::crd_t>()(h.q()) << 2 ^
+                   std::hash<Hex::crd_t>()(h.r()) << 1 ^
+                   std::hash<Hex::crd_t>()(h.s());
+        }
+    };
 } // namespace rev
 
 #endif // HEX_H
