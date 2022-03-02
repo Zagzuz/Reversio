@@ -26,6 +26,7 @@ namespace rev
         static const Hex& direction(int dir);
         Hex neighbor(int dir) const;
         Point<crd_t> to_pixel(const Layout<crd_t>& layout) const noexcept;
+        static Hex from_pixel(const Layout<crd_t>& layout, const Point<crd_t>& p);
     private:
         const crd_t q_, r_;
     };

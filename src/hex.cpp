@@ -1,5 +1,6 @@
 #include "hex.h"
-#include "Hex.h"
+#include "hex.h"
+#include "hex.h"
 
 namespace rev
 {
@@ -27,7 +28,31 @@ namespace rev
     {
         double x = (layout.orientation.f0 * q() + layout.orientation.f1 * r()) * layout.size.x;
         double y = (layout.orientation.f2 * q() + layout.orientation.f3 * r()) * layout.size.y;
-        return Point(x + layout.origin.x, y + layout.origin.y);
+        return Point<crd_t>(x + layout.origin.x, y + layout.origin.y);
+    }
+
+    Hex Hex::from_pixel(const Layout<crd_t>& layout, const Point<crd_t>& p)
+    {
+        Point<crd_t> pt = {
+            (p.x - layout.origin.x) / layout.size.x,
+            (p.y - layout.origin.y) / layout.size.y
+        };
+        double q = layout.orientation.b0 * pt.x + layout.orientation.b1 * pt.y;
+        double r = layout.orientation.b2 * pt.x + layout.orientation.b3 * pt.y;
+        double s = -q - r;
+        Hex::crd_t q2 = std::round(q);
+        Hex::crd_t r2 = std::round(r);
+        Hex::crd_t s2 = std::round(s);
+        double q_diff = std::abs(q2 - q);
+        double r_diff = std::abs(r2 - r);
+        double s_diff = std::abs(s2 - s);
+        if (q_diff > r_diff && q_diff > s_diff)
+            q2 = -r2 - s2;
+        else if (r_diff > s_diff)
+            r2 = -q2 - s2;
+        else
+            s2 = -q2 - r2;
+        return Hex(q2, r2, s2);
     }
 
     const Hex& Hex::direction(int dir)
