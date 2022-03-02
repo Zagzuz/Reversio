@@ -12,7 +12,7 @@ namespace rev
 		Layout(Orientation orientation, Point<T> size, Point<T> origin) noexcept :
 			orientation(orientation), size(size), origin(origin) {}
 		const Orientation orientation;
-		const Point size, origin;
+		const Point<T> size, origin;
 	};
 } // namespace rev
 

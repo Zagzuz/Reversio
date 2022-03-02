@@ -1,3 +1,4 @@
+#include "hex.h"
 #include "Hex.h"
 
 namespace rev
@@ -20,6 +21,13 @@ namespace rev
         return std::abs(lhs.q() / 2 - rhs.q() / 2) +
                std::abs(lhs.r() / 2 - rhs.r() / 2) +
                std::abs(lhs.s() / 2 - rhs.s() / 2);
+    }
+
+    Point<Hex::crd_t> Hex::to_pixel(const Layout<crd_t>& layout) const noexcept
+    {
+        double x = (layout.orientation.f0 * q() + layout.orientation.f1 * r()) * layout.size.x;
+        double y = (layout.orientation.f2 * q() + layout.orientation.f3 * r()) * layout.size.y;
+        return Point(x + layout.origin.x, y + layout.origin.y);
     }
 
     const Hex& Hex::direction(int dir)

@@ -2,6 +2,8 @@
 #define HEX_H
 
 #include "nof.h"
+#include "layout.h"
+#include "point.h"
 
 #include <cmath>
 #include <array>
@@ -23,6 +25,7 @@ namespace rev
         static Hex::crd_t distance(const Hex& lhs, const Hex& rhs) noexcept;
         static const Hex& direction(int dir);
         Hex neighbor(int dir) const;
+        Point<crd_t> to_pixel(const Layout<crd_t>& layout) const noexcept;
     private:
         const crd_t q_, r_;
     };
