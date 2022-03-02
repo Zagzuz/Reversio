@@ -20,4 +20,5 @@ target_link_libraries(Reversio PRIVATE
 					  sfml-graphics
 					  sfml-network
 					  sfml-system
-					  ${Boost_log})
+					  ${Boost_log}
+)

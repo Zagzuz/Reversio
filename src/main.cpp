@@ -1,9 +1,22 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <iostream>
-#include <unordered_set>
+#include <unordered_map>
 
 #include "hex.h"
 #include "layout.h"
+
+sf::ConvexShape create_polygon(const rev::Layout<rev::Hex::crd_t>& layout, const rev::Hex& hex)
+{
+    sf::ConvexShape polygon(6);
+    auto corners = hex.polygon_corners(layout);
+    for (decltype(corners)::size_type i = 0; i < corners.size(); ++i)
+    {
+        polygon.setPoint(i, sf::Vector2f(corners[i].x, corners[i].y));
+    }
+    polygon.setOutlineColor(sf::Color::Black);
+    polygon.setOutlineThickness(1);
+    return polygon;
+}
 
 int main()
 {
@@ -11,20 +24,14 @@ int main()
 
     sf::VideoMode video_mode(800, 600);
     sf::RenderWindow window(video_mode, "Reversio");
+    window.setVerticalSyncEnabled(true);
     sf::Event event;
 
-    Point<int> layout_size(30, 30);
-    Point<int> layout_origin(50, 50);
+    Point<int> layout_size(20, 20);
+    Point<int> layout_origin(0, 0);
     Layout<int> layout(pointy_orientation(), layout_size, layout_origin);
-    std::unordered_set<Hex, HexHash> hexes;
-    for (int q = 0; q < 7; ++q)
-    {
-        for (int r = 0; r < 7; ++r)
-        {
-            if (q + r < 3 || q + r > 9) continue;
-            hexes.emplace(q, r);
-        }
-    }
+
+    std::unordered_map<Hex, sf::ConvexShape, HexHash> polygon_map;
 
     while (window.isOpen())
     {
@@ -36,22 +43,26 @@ int main()
             break;
 
         case sf::Event::KeyPressed:
-            break; 
+            break;
 
         default:
             break;
         }
 
-        for (const Hex& hex : hexes)
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
-            for (auto&& corner : hex.polygon_corners(layout))
-            {
-                sf::Vertex point({ corner.x, corner.y }, sf::Color::White);
-                window.draw(&point, 1, sf::Points);
-            }
+            sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
+            Hex hex = Hex::from_pixel(layout, { mouse_pos.x, mouse_pos.y });
+            polygon_map.emplace(hex, create_polygon(layout, hex));
+        }
+
+        for (auto&& [hex, poly] : polygon_map)
+        {
+            window.draw(poly);
         }
 
         window.display();
     }
+
 	return 0;
 }
