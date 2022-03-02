@@ -11,6 +11,12 @@ namespace rev
 		Point& operator=(Point p) noexcept { std::swap(*this, p); return *this; }
 		const T x, y;
 	};
+
+	template <typename T>
+	Point<T> operator+(const Point<T>& lhs, const Point<T>& rhs) noexcept
+	{
+		return { lhs.x + rhs.x, lhs.y + rhs.y };
+	}
 } // namespace rev
 
 #endif // POINT_H

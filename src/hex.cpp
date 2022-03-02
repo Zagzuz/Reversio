@@ -1,6 +1,4 @@
 #include "hex.h"
-#include "hex.h"
-#include "hex.h"
 
 namespace rev
 {
@@ -53,6 +51,26 @@ namespace rev
         else
             s2 = -q2 - r2;
         return Hex(q2, r2, s2);
+    }
+
+    Point<Hex::crd_t> Hex::corner_offset(const Layout<crd_t>& layout, int corner)
+    {
+        double angle = 2.0 * M_PI * (layout.orientation.start_angle + corner) / 6;
+        return Point<crd_t>(layout.size.x * cos(angle), layout.size.y * sin(angle));
+    }
+
+    std::array<Point<Hex::crd_t>, 6> Hex::polygon_corners(const Layout<Hex::crd_t>& layout) const
+    {
+        Point<crd_t> center = this->to_pixel(layout);
+        std::array<Point<crd_t>, 6> corners = {
+            center + corner_offset(layout, 0),
+            center + corner_offset(layout, 1),
+            center + corner_offset(layout, 2),
+            center + corner_offset(layout, 3),
+            center + corner_offset(layout, 4),
+            center + corner_offset(layout, 5),
+        };
+        return corners;
     }
 
     const Hex& Hex::direction(int dir)

@@ -1,6 +1,8 @@
 #ifndef HEX_H
 #define HEX_H
 
+#define _USE_MATH_DEFINES
+
 #include "nof.h"
 #include "layout.h"
 #include "point.h"
@@ -27,6 +29,8 @@ namespace rev
         Hex neighbor(int dir) const;
         Point<crd_t> to_pixel(const Layout<crd_t>& layout) const noexcept;
         static Hex from_pixel(const Layout<crd_t>& layout, const Point<crd_t>& p);
+        static Point<crd_t> corner_offset(const Layout<crd_t>& layout, int corner);
+        std::array<Point<crd_t>, 6> polygon_corners(const Layout<Hex::crd_t>& layout) const;
     private:
         const crd_t q_, r_;
     };
