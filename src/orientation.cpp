@@ -2,9 +2,9 @@
 
 namespace rev
 {
-    Orientation::Orientation(double f0, double f1, double f2, double f3,
-                double b0, double b1, double b2, double b3,
-                double start_angle) noexcept :
+    Orientation::Orientation(value_type f0, value_type f1, value_type f2, value_type f3,
+                             value_type b0, value_type b1, value_type b2, value_type b3,
+                             value_type start_angle) noexcept :
         f0(f0), f1(f1), f2(f2), f3(f3),
         b0(b0), b1(b1), b2(b2), b3(b3),
         start_angle(start_angle) {}

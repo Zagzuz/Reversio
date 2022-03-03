@@ -6,13 +6,13 @@
 
 namespace rev
 {	
-	template <typename T>
 	struct Layout
 	{
-		Layout(Orientation orientation, Point<T> size, Point<T> origin = { 0, 0 }) noexcept :
+		using size_type = unsigned int;
+		Layout(Orientation orientation, Point<size_type> size, Point<size_type> origin = { 0, 0 }) noexcept :
 			orientation(orientation), size(size), origin(origin) {}
 		const Orientation orientation;
-		const Point<T> size, origin;
+		const Point<size_type> size, origin;
 	};
 } // namespace rev
 

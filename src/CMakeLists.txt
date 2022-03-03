@@ -8,13 +8,11 @@ find_package(SFML 2.5 COMPONENTS
 			 network REQUIRED)
 find_package(Boost 1.78 COMPONENTS log REQUIRED)
 link_directories(${PROJECT_SOURCE_DIR}/Boost/lib)
-include_directories(${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src)
 
-add_executable(Reversio "main.cpp")
-add_library(Hex "hex.cpp" "hex.h")
+add_executable(Reversio "main.cpp" "point.h")
 add_library(Orientation "orientation.cpp" "orientation.h")
-target_link_libraries(Reversio PRIVATE
-					  Hex
+include_directories(${Boost_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(Reversio PUBLIC
 					  Orientation
 					  sfml-audio
 					  sfml-graphics

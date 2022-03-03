@@ -1,9 +1,11 @@
+#include <SFML/System/Vector2.hpp>
+
 #ifndef POINT_H
 #define POINT_H
 
 namespace rev
 {
-	template <typename T>
+	/*template <typename T>
 	struct Point
 	{
 		constexpr Point(T x, T y) noexcept : x(x), y(y) {}
@@ -16,7 +18,10 @@ namespace rev
 	Point<T> operator+(const Point<T>& lhs, const Point<T>& rhs) noexcept
 	{
 		return { lhs.x + rhs.x, lhs.y + rhs.y };
-	}
+	}*/
+
+	template <typename T>
+	using Point = sf::Vector2<T>;
 } // namespace rev
 
 #endif // POINT_H

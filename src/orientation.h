@@ -8,21 +8,22 @@ namespace rev
 {
     struct Orientation
     {
-        Orientation(double f0, double f1, double f2, double f3,
-                    double b0, double b1, double b2, double b3,
-                    double start_angle) noexcept;
+        using value_type = double;
+        Orientation(value_type f0, value_type f1, value_type f2, value_type f3,
+                    value_type b0, value_type b1, value_type b2, value_type b3,
+                    value_type start_angle) noexcept;
         Orientation(const Orientation& x) noexcept;
         Orientation& operator=(Orientation x) noexcept;
-        const double f0, f1, f2, f3;
-        const double b0, b1, b2, b3;
-        const double start_angle; // in multiples of 60°
+        const value_type f0, f1, f2, f3;
+        const value_type b0, b1, b2, b3;
+        const value_type start_angle;
     };
 
     inline Orientation pointy_orientation() noexcept
     {
         return {
-            std::sqrt(3.0), std::sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,
-            std::sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0,
+            std::sqrt(3), std::sqrt(3) / 2, 0.0, 3.0 / 2,
+            std::sqrt(3) / 3, -1.0 / 3, 0, 2.0 / 3.0,
             0.5
         };
     }
@@ -30,8 +31,8 @@ namespace rev
     inline Orientation flat_orientation() noexcept
     {
         return {
-            3.0 / 2.0, 0.0, std::sqrt(3.0) / 2.0, std::sqrt(3.0),
-            2.0 / 3.0, 0.0, -1.0 / 3.0, std::sqrt(3.0) / 3.0,
+            3.0 / 2.0, 0.0, std::sqrt(3) / 2.0, std::sqrt(3),
+            2.0 / 3.0, 0.0, -1.0 / 3.0, std::sqrt(3) / 3.0,
             0.0
         };
     }
