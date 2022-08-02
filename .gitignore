@@ -1,10 +1,12 @@
-# Visual Studio 2019 cache/options directory
+# Build system temporary files and folders
 .vs/
+build/
 out/
+*.pdb
+*.ilk
 
-# Packages
-SFML/
-Boost/
+# CMake devmachine-specific config
+CMakeSettings.json
 
-# Readme
-readme.md
+# Binaries
+exe/
