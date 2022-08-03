@@ -26,7 +26,6 @@ struct Hex {
   crd_t q() const noexcept { return q_; }
   crd_t r() const noexcept { return r_; }
   crd_t s() const noexcept { return -q_ - r_; }
-  crd_t length() const noexcept;
   static crd_t distance(const Hex& lhs, const Hex& rhs) noexcept;
   static const Hex& direction(int dir);
   Hex neighbor(int dir) const;
@@ -56,11 +55,6 @@ Hex<T>::Hex(const Hex& rhs) noexcept : q_(rhs.q_), r_(rhs.r_) {}
 template <class T>
 Hex<T>::Hex(Hex&& rhs) noexcept
     : q_(std::move(rhs.q_)), r_(std::move(rhs.r_)) {}
-
-template <class T>
-typename Hex<T>::crd_t Hex<T>::length() const noexcept {
-  return std::abs(q() / 2) + std::abs(r() / 2) + std::abs(s() / 2);
-}
 
 template <class T>
 typename Hex<T>::crd_t Hex<T>::distance(const Hex<T>& lhs,
