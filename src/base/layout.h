@@ -1,7 +1,7 @@
 #ifndef LAYOUT_H
 #define LAYOUT_H
 
-#include "orientation.h"
+#include "orientation.hpp"
 #include "point.h"
 
 namespace rev {
