@@ -1,10 +1,6 @@
 #ifndef HEX_H
 #define HEX_H
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 #include "layout.h"
 #include "nof.h"
 #include "point.h"
@@ -15,6 +11,8 @@
 #include <cmath>
 #include <stdexcept>
 #include <utility>
+
+inline constexpr long double PI{3.14159265358979323846};
 
 namespace rev {
 template <class T>
@@ -150,7 +148,7 @@ Hex<int> Hex<int>::from_pixel(const Layout& layout, const Point<crd_t>& p) {
 template <class T>
 Point<typename Hex<T>::crd_t> Hex<T>::corner_offset(const Layout& layout,
                                                     int corner) {
-  auto angle = 2 * M_PI * (layout.orientation.start_angle + corner) / 6;
+  auto angle = 2 * PI * (layout.orientation.start_angle + corner) / 6;
   return {static_cast<crd_t>(layout.size.x * std::cos(angle)),
           static_cast<crd_t>(layout.size.y * std::sin(angle))};
 }
