@@ -9,13 +9,15 @@
 
 #include <base/hex.h>
 
+using namespace rev;
+using namespace std;
+
 BOOST_AUTO_TEST_SUITE(HexTests)
 
 BOOST_AUTO_TEST_CASE(Constructor) {
-  BOOST_CHECK_THROW(rev::Hex(1, 1, -1), std::logic_error);
-  using int_limits = std::numeric_limits<int>;
-  BOOST_CHECK_THROW(rev::Hex(int_limits::max(), int_limits::min(), 1),
-                    std::logic_error);
+  BOOST_CHECK_THROW(IntHex(1, 1, -1), invalid_argument);
+
+  BOOST_CHECK_THROW(IntHex(numeric_limits<int>::max(), 1, 1), invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(Length) {
