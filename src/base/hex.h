@@ -5,8 +5,9 @@
 #include "nof.h"
 #include "point.h"
 
-#include <array>
 #include <boost/log/trivial.hpp>
+
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <stdexcept>
@@ -217,6 +218,26 @@ Hex<T> operator*(const Hex<T>& lhs, const Hex<T>& rhs) {
 template <class T>
 bool operator==(const Hex<T>& lhs, const Hex<T>& rhs) noexcept {
   return lhs.q() == rhs.q() && lhs.r() == rhs.r() && lhs.s() == rhs.s();
+}
+
+template <class T>
+requires std::is_integral_v<T> std::vector<Hex<T>> line(const Hex<T>& h1,
+                                                        const Hex<T>& h2) {
+  const auto dst{Hex<T>::distance(h1, h2)};
+  auto lerp{
+      [](double a, double b, double t) -> double { return a + (b - a) * t; }};
+  auto cube_lerp{
+      [&lerp](const Hex<T>& a, const Hex<T>& b, double t) -> Hex<double> {
+        return Hex<double>{lerp(a.q(), b.q(), t), lerp(a.r(), b.r(), t),
+                           lerp(a.s(), b.s(), t)};
+      }};
+  std::vector<Hex<T>> hexes_on_the_line;
+  hexes_on_the_line.reserve(static_cast<size_t>(dst));
+  for (T i = 0; i < dst; ++i) {
+    hexes_on_the_line.emplace_back(
+        round_cube(cube_lerp(h1, h2, 1.0 / dst * i)));
+  }
+  return hexes_on_the_line;
 }
 
 using IntHex = Hex<int>;
