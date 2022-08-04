@@ -31,7 +31,15 @@ struct Hex {
   crd_t r() const noexcept { return r_; }
   crd_t s() const noexcept { return -q_ - r_; }
 
-  Point<crd_t> to_pixel(const Layout& layout) const noexcept;
+  template <class PxlTy>
+  Point<PxlTy> to_pixel(const Layout& layout) const noexcept {
+    auto x{(layout.orientation.f0 * q() + layout.orientation.f1 * r()) *
+           layout.size.x};
+    auto y{(layout.orientation.f2 * q() + layout.orientation.f3 * r()) *
+           layout.size.y};
+    return {static_cast<crd_t>(x + layout.origin.x),
+            static_cast<crd_t>(y + layout.origin.y)};
+  }
 
   std::array<Point<crd_t>, 6> polygon_corners(
       const Layout& layout) const noexcept;
@@ -72,25 +80,15 @@ Hex<T>::Hex(Hex&& rhs) noexcept
 template <class T>
 typename Hex<T>::crd_t Hex<T>::distance(const Hex<T>& lhs,
                                         const Hex<T>& rhs) noexcept {
-  return std::max(std::abs(lhs.q() - rhs.q()) + std::abs(lhs.r() - rhs.r()) +
-                  std::abs(lhs.s() - rhs.s()));
-}
-
-template <class T>
-Point<typename Hex<T>::crd_t> Hex<T>::to_pixel(
-    const Layout& layout) const noexcept {
-  auto x{(layout.orientation.f0 * q() + layout.orientation.f1 * r()) *
-         layout.size.x};
-  auto y{(layout.orientation.f2 * q() + layout.orientation.f3 * r()) *
-         layout.size.y};
-  return {static_cast<crd_t>(x + layout.origin.x),
-          static_cast<crd_t>(y + layout.origin.y)};
+  return std::max(
+      std::abs(lhs.s() - rhs.s()),
+      std::max(std::abs(lhs.q() - rhs.q()), std::abs(lhs.r() - rhs.r())));
 }
 
 template <class T>
 std::array<Point<T>, 6> Hex<T>::polygon_corners(
     const Layout& layout) const noexcept {
-  Point<crd_t> center{this->to_pixel(layout)};
+  Point<crd_t> center{to_pixel<crd_t>(layout)};
   return {center + corner_offset(layout, 0), center + corner_offset(layout, 1),
           center + corner_offset(layout, 2), center + corner_offset(layout, 3),
           center + corner_offset(layout, 4), center + corner_offset(layout, 5)};
