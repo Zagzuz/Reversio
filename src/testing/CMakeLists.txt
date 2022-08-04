@@ -1,8 +1,5 @@
 set(REVERSIO_TESTING_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(SFML_STATIC_LIBRARIES TRUE)
-set(Boost_USE_STATIC_LIBS ON)
 
-find_package(SFML 2.5.1 COMPONENTS system graphics audio network REQUIRED)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 set(TESTING_SOURCES "test_hex.cpp")
