@@ -21,6 +21,9 @@ Point<T> operator+(const Point<T>& lhs, const Point<T>& rhs) noexcept
 
 template <typename T>
 using Point = sf::Vector2<T>;
+
+using IntPt = sf::Vector2i;
+using FracPt = sf::Vector2<double>;
 }  // namespace rev
 
 #endif  // POINT_H
