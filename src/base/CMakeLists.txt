@@ -2,8 +2,7 @@ add_library(base
 		"hex.h"
 		"layout.h"
 		"nof.h"
-		"orientation.hpp"
-		"orientation.cpp"
+		"orientation.h"
 		"point.h")
 
 target_compile_features(base PRIVATE cxx_std_20)
