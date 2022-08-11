@@ -1,13 +1,11 @@
-#define BOOST_TEST_MODULE "Hex Testing Module"
-
 #pragma warning(push)
 #pragma warning(disable : 26812 26495)
 #include <boost/test/unit_test.hpp>
 #pragma warning(pop)
 
-#include <limits>
-
 #include <base/hex.h>
+
+#include <limits>
 
 using namespace rev;
 using namespace std;

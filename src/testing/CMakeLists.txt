@@ -1,34 +1,23 @@
-set(REVERSIO_TESTING_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
-set(TESTING_SOURCES "test_hex.cpp")
+add_executable(test_unit 
+		"test_hex.cpp" 
+		"test_main.cpp" 
+		"test_nof.cpp")
 
-foreach (src ${TESTING_SOURCES})
+target_compile_features(test_unit PRIVATE cxx_std_20)
 
-	get_filename_component(src_name ${src} NAME_WE)
+target_link_options(test_unit PRIVATE
+		$<$<CONFIG:Release>:${RELEASE_LINK_OPTIONS}>
+		$<$<CONFIG:Release>:${LTO_LINK_OPTIONS}>)
 
-	add_executable(${src_name} ${src})
+target_include_directories(test_unit 
+		PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+		PRIVATE ${REVERSIO_SOURCE_DIR})
 
-	target_compile_features(${src_name} PRIVATE cxx_std_20)
-
-	target_link_options(${src_name} PRIVATE
-			$<$<CONFIG:Release>:${RELEASE_LINK_OPTIONS}>
-			$<$<CONFIG:Release>:${LTO_LINK_OPTIONS}>)
-
-	target_include_directories(${src_name} 
-			PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-			PRIVATE ${REVERSIO_SOURCE_DIR})
-	
-	target_link_libraries(${src_name} PUBLIC
-			sfml-audio
-			sfml-graphics
-			sfml-network
-			sfml-system
-			Boost::unit_test_framework)
-
-	add_test(NAME ${src_name}
-			WORKING_DIRECTORY ${REVERSIO_TESTING_DIR}
-			COMMAND ${REVERSIO_TEST_DIR}/${src_name})
-
-endforeach(src)
+target_link_libraries(test_unit PUBLIC
+		sfml-audio
+		sfml-graphics
+		sfml-network
+		sfml-system
+		Boost::unit_test_framework)
