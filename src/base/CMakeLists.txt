@@ -3,7 +3,8 @@ add_library(base
 		"layout.h"
 		"nof.h"
 		"orientation.h"
-		"point.h")
+		"point.h" 
+		"poly.h")
 
 target_compile_features(base PRIVATE cxx_std_20)
 
