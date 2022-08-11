@@ -4,112 +4,87 @@
 #include <boost/log/trivial.hpp>
 
 #include <iostream>
-#include <sstream>
-#include <unordered_map>
+#include <string>
 
 #include "hex.h"
 #include "layout.h"
+#include "polymap.h"
 
-template <class T>
-sf::ConvexShape create_polygon(const rev::Layout& layout,
-                               const rev::Hex<T>& hex,
-                               const sf::Color& fill_color = sf::Color::White) {
-  sf::ConvexShape polygon(6);
-  auto corners = hex.polygon_corners(layout);
-  for (decltype(corners)::size_type i = 0; i < corners.size(); ++i) {
-    polygon.setPoint(i, sf::Vector2f(corners[i]));
-  }
-  polygon.setOutlineColor(sf::Color::Black);
-  polygon.setFillColor(fill_color);
-  polygon.setOutlineThickness(1);
-  return polygon;
-}
+using namespace rev;
+using namespace sf;
+using namespace std;
 
 namespace logging = boost::log;
 
 int main() {
-  using namespace rev;
-
   logging::core::get()->set_filter(logging::trivial::severity >=
-                                   logging::trivial::info);
+                                   logging::trivial::debug);
 
-  sf::VideoMode video_mode(600, 600);
-  sf::RenderWindow window(video_mode, "Reversio");
+  VideoMode video_mode(800, 600);
+  RenderWindow window(video_mode, "Reversio");
   window.setFramerateLimit(60);
-  sf::Event event;
-  auto mouse_pos = [&window]() { return sf::Mouse::getPosition(window); };
 
-  sf::Font arial_font;
-  arial_font.loadFromFile("res/Hack-Regular.ttf");
-  sf::Text text;
-  text.setFont(arial_font);
-  sf::Texture Y;
-  Y.loadFromFile("res/Y.png");
+  auto mouse_pos = [&window]() { return Mouse::getPosition(window); };
+  auto gmouse_pos = [&window, &mouse_pos]() {
+    return window.mapPixelToCoords(mouse_pos());
+  };
 
-  Point<unsigned int> layout_size(60, 60);
-  Point<unsigned int> layout_origin(0, 0);
-  Layout layout(pointy_orientation(), layout_size, layout_origin);
+  Layout layout{
+      .orientation = Orientation::pointy(), .size = {16, 12}, .origin = {0, 0}};
 
-  using poly_map_t = IntHex;
-  std::unordered_map<poly_map_t, sf::ConvexShape, HexHash<poly_map_t::crd_t>>
-      polygon_map;
+  View view{window.getDefaultView()};
 
-  std::unique_ptr<IntHex> ih;
-  std::unique_ptr<FracHex> fh;
+  Polymap<40, 30> map{layout};
+
+  Text mouse_position;
+  Font font;
+  font.loadFromFile("C:\\Windows\\Fonts\\Hack-Regular.ttf");
 
   while (window.isOpen()) {
+    Event event;
     window.pollEvent(event);
-    if (event.type == sf::Event::Closed) {
+
+    if (event.type == Event::Closed) {
       window.close();
-    } else if (event.type == sf::Event::Resized) {
-      sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
-      window.setView(sf::View(visibleArea));
-    } else if (event.type == sf::Event::MouseButtonPressed) {
-      if (event.mouseButton.button == sf::Mouse::Left) {
-        auto hex = round_cube(from_pixel(layout, mouse_pos()));
-        auto poly = create_polygon(layout, hex);
-        poly.setTexture(&Y);
-        auto&& [it, b] = polygon_map.emplace(hex, poly);
-        if (b)
-          BOOST_LOG_TRIVIAL(debug)
-              << "(hex, poly) pair emplaced at (" << hex.q() << ", " << hex.r()
-              << ", " << hex.s() << ')';
-      } else if (event.mouseButton.button == sf::Mouse::Right) {
-        auto hex = round_cube(from_pixel(layout, mouse_pos()));
-        auto it = polygon_map.find(hex);
-        if (it != polygon_map.end()) {
-          polygon_map.erase(it);
-          BOOST_LOG_TRIVIAL(debug) << "(hex, poly) pair erased at (" << hex.q()
-                                   << ", " << hex.r() << ", " << hex.s() << ')';
-        }
-      }
-    } else if (event.type == sf::Event::MouseMoved) {
-      ih.reset(&round_cube(from_pixel(layout, mouse_pos())));
-      fh.reset(&from_pixel(layout, mouse_pos()));
-      std::ostringstream ostr;
-      ostr << '(' << mouse_pos().x << ", " << mouse_pos().y << ")\n"
-           << '(' << fh->q() << ", " << fh->r() << ", " << fh->s() << ")\n"
-           << '(' << ih->q() << ", " << ih->r() << ", " << ih->s() << ')';
-      text.setString(ostr.str());
+    } else if (event.type == Event::Resized) {
+      FloatRect visibleArea(0.f, 0.f, static_cast<float>(event.size.width),
+                            static_cast<float>(event.size.height));
+      window.setView(View(visibleArea));
     }
+
+    if (Keyboard::isKeyPressed(Keyboard::Key::Down)) {
+      view.move(0, 10);
+    } else if (Keyboard::isKeyPressed(Keyboard::Key::Up)) {
+      view.move(0, -10);
+    } else if (Keyboard::isKeyPressed(Keyboard::Key::Left)) {
+      view.move(-10, 0);
+    } else if (Keyboard::isKeyPressed(Keyboard::Key::Right)) {
+      view.move(10, 0);
+    }
+
+    if (Mouse::isButtonPressed(Mouse::Button::Left)) {
+      map.place<GrassPoly>(IntPt{gmouse_pos()});
+    } else if (Mouse::isButtonPressed(Mouse::Button::Right)) {
+      map.place<LavaPoly>(IntPt{gmouse_pos()});
+    } else if (Keyboard::isKeyPressed(Keyboard::Delete)) {
+      map.remove(IntPt{gmouse_pos()});
+    }
+
+    auto axial{hex_from_pixel_rounded<int>(layout, mouse_pos())};
+    string mp{string{"("} + to_string(gmouse_pos().x) + ", " +
+              to_string(gmouse_pos().y) + ") = (" + to_string(axial.q()) +
+              ", " + to_string(axial.r()) + ")"};
+    mouse_position.setString(mp);
+    mouse_position.setFont(font);
 
     window.clear();
 
-    for (auto&& [hex, poly] : polygon_map) {
-      window.draw(poly);
-    }
+    window.setView(view);
 
-    if (mouse_pos().x > 0 && mouse_pos().x < window.getView().getSize().x &&
-        mouse_pos().y > 0 && mouse_pos().y < window.getView().getSize().y) {
-      if (ih)
-        window.draw(create_polygon(layout, *ih, sf::Color::Red));
-      window.draw(text);
-    }
+    window.draw(map);
+    window.draw(mouse_position);
 
     window.display();
-
-    (void)ih.release();
-    (void)fh.release();
   }
 
   return 0;
