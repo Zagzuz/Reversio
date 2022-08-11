@@ -14,7 +14,7 @@
 #include <utility>
 
 namespace rev {
-inline constexpr long double PI{3.14159265358979323846};
+enum class Offset { ODD = -1, EVEN = 1 };
 
 template <class T>
 struct Hex {
