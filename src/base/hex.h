@@ -5,6 +5,7 @@
 #include "nof.h"
 #include "point.h"
 
+#include <boost/functional/hash.hpp>
 #include <boost/log/trivial.hpp>
 
 #include <array>
@@ -83,19 +84,19 @@ struct Hex {
             static_cast<crd_t>(layout.size.y * std::sin(angle))};
   }
 
+  [[nodiscard]] auto operator<=>(const Hex<T>&) const = default;
+
  private:
   const crd_t m_q, m_r;
 };
 
-// TODO: improve hashing or remove
-// template <class T>
-// struct HexHash {
-//  std::size_t operator()(const Hex<T>& h) const noexcept {
-//    return std::hash<Hex<T>::crd_t>()(h.q()) << 2 ^
-//           std::hash<Hex<T>::crd_t>()(h.r()) << 1 ^
-//           std::hash<Hex<T>::crd_t>()(h.s());
-//  }
-//};
+template <class T>
+std::size_t hash_value(const Hex<T>& p) {
+  std::size_t seed{0};
+  boost::hash_combine(seed, p.q());
+  boost::hash_combine(seed, p.r());
+  return seed;
+}
 
 template <class PxlTy>
 [[nodiscard]] Point<PxlTy> pixel_to_axial(const Layout& layout,
@@ -236,11 +237,6 @@ template <class T>
     return lhs;
   }
   return Hex{x.get(), y.get(), z.get()};
-}
-
-template <class T>
-[[nodiscard]] bool operator<=>(const Hex<T>& lhs, const Hex<T>& rhs) noexcept {
-  return std::tie(lhs.q(), lhs.r(), lhs.s()) <=> std::tie(rhs.q(), rhs.r(), rhs.s());
 }
 
 using IntHex = Hex<int>;
